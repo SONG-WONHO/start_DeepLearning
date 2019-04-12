@@ -1,10 +1,10 @@
 import tensorflow as tf
 
-#data
-x_data = [1,2,3,4,5,6,7]
-y_data = [4,5,6,7,8,9,10]
+# data
+x_data = [1, 2, 3, 4, 5, 6, 7]
+y_data = [4, 5, 6, 7, 8, 9, 10]
 
-#constants
+# constants
 learning_rate = 0.01
 
 X = tf.placeholder(tf.float32, [None])
@@ -13,10 +13,10 @@ Y = tf.placeholder(tf.float32, [None])
 W = tf.Variable(tf.random_normal([1]), name="weight")
 b = tf.Variable(tf.random_normal([1]), name="bias")
 
-#linear hypothesis
-hypothesis = X*W + b
+# linear hypothesis
+hypothesis = X * W + b
 
-#cost function, x_value: weight, y_value: cost
+# cost function, x_value: weight, y_value: cost
 cost = tf.reduce_mean(tf.square(hypothesis - Y), -1, name="cost")
 train = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
 
@@ -24,7 +24,7 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
     for step in range(2000):
-        cost_val, hypothesis_val, _ = sess.run([cost, hypothesis, train], feed_dict={X:x_data, Y:y_data})
+        cost_val, hypothesis_val, _ = sess.run([cost, hypothesis, train], feed_dict={X: x_data, Y: y_data})
 
         if step % 20 == 0:
             print("[{}] cost {} hypothesis {}".format(step, cost_val, hypothesis_val))
