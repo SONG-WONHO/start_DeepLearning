@@ -1,26 +1,32 @@
 import tensorflow as tf
 import numpy as np
 
-#data
-x_data = np.array([[88,100,70,45,50],[84,88,80,45,45],[96,100,96,50,50],[100,70,90,40,45],[70,70,70,35,35]], np.float32)
-y_data = [[96],[92],[100],[88],[80]]
+# data
+x_data = np.array(
+    [[88, 100, 70, 45, 50],
+     [84, 88, 80, 45, 45],
+     [96, 100, 96, 50, 50],
+     [100, 70, 90, 40, 45],
+     [70, 70, 70, 35, 35]],
+    np.float32)
+y_data = [[96], [92], [100], [88], [80]]
 
-#constants
+# constants
 num_feature = len(x_data[0])
 learning_rate = 0.01
 
-#data normalization
+# data normalization
 for i in range(num_feature):
-    x_data[:,i] = (x_data[:,i]-x_data[:,i].mean())/x_data[:,i].std()
+    x_data[:, i] = (x_data[:, i] - x_data[:, i].mean()) / x_data[:, i].std()
 
-#multi feature
+# multi feature
 X = tf.placeholder(tf.float32, [None, num_feature])
 Y = tf.placeholder(tf.float32, [None, 1])
 
 W = tf.Variable(tf.random_normal([num_feature, 1]), name="weight")
 b = tf.Variable(tf.random_normal([1]), name="bias")
 
-hypothesis = tf.matmul(X, W)+b
+hypothesis = tf.matmul(X, W) + b
 
 cost = tf.reduce_mean(tf.square(hypothesis - Y), -1, name="cost")
 train = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
@@ -29,7 +35,7 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
     for step in range(2000):
-        cost_val, hypothesis_val, _ = sess.run([cost,hypothesis,train], feed_dict={X:x_data, Y:y_data})
+        cost_val, hypothesis_val, _ = sess.run([cost, hypothesis, train], feed_dict={X: x_data, Y: y_data})
 
         if step % 20 == 0:
             print("[{}] cost {} prediction {}".format(step, cost_val, hypothesis_val))
